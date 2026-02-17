@@ -1,14 +1,5 @@
 .section-center {
   width: 90vw;
   margin: 0 auto;
-  max-width: 35rem;
-  margin-top: 8rem;
-  background: var(--white);
-  border-radius: var(--borderRadius);
-  padding: 2rem;
-  box-shadow: var(--shadow-2);
-  transition: var(--transition);
-}
-.section-center:hover {
-  box-shadow: var(--shadow-2);
+  max-width: 450px;
 }

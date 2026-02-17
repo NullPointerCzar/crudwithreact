@@ -24,12 +24,16 @@ const SingleItem = ({ item, removeItem, toggleItem, editItem }) => {
           className='form-input'
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
-          style={{ height: '1.5rem', alignSelf: 'center' }}
+          autoFocus
+          onBlur={handleEdit}
+          onKeyDown={(e) => e.key === 'Enter' && handleEdit()}
+          style={{ height: '2rem', padding: '0.25rem 0.5rem' }}
         />
       ) : (
         <p
           style={{
             textDecoration: item.completed && 'line-through',
+            opacity: item.completed ? 0.5 : 1,
           }}
         >
           {item.name}
