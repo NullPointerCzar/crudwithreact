@@ -1,35 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import Form from './components/Form';
+import Items from './components/Items';
+import { groceryItems } from './data/groceryItems';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+const setLocalStorage = (items) => {
+  localStorage.setItem('list', JSON.stringify(items));
+};
+
+const defaultList = JSON.parse(localStorage.getItem('list') || JSON.stringify(groceryItems));
+
+const App = () => {
+  const [items, setItems] = useState(defaultList);
+
+  const addItem = (itemName) => {
+    const newItem = {
+      name: itemName,
+      completed: false,
+      id: Date.now().toString(),
+    };
+    const newItems = [...items, newItem];
+    setItems(newItems);
+    setLocalStorage(newItems);
+  };
+
+  const removeItem = (itemId) => {
+    const newItems = items.filter((item) => item.id !== itemId);
+    setItems(newItems);
+    setLocalStorage(newItems);
+  };
+
+  const toggleItem = (itemId) => {
+    const newItems = items.map((item) => {
+      if (item.id === itemId) {
+        return { ...item, completed: !item.completed };
+      }
+      return item;
+    });
+    setItems(newItems);
+    setLocalStorage(newItems);
+  };
+
+  const editItem = (itemId, newName) => {
+    const newItems = items.map((item) => {
+      if (item.id === itemId) {
+        return { ...item, name: newName };
+      }
+      return item;
+    });
+    setItems(newItems);
+    setLocalStorage(newItems);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <section className='section-center'>
+      <Form addItem={addItem} />
+      <Items items={items} removeItem={removeItem} toggleItem={toggleItem} editItem={editItem} />
+    </section>
+  );
+};
 
-export default App
+export default App;
